@@ -1,7 +1,5 @@
 package IngresarParque;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
+
 
 public class ColectivoFolklorico {
 private int cantAdentro;
@@ -43,15 +41,14 @@ public synchronized  void bajarse(){
         }
     }
     cantAdentro--;
-      this.notifyAll();
+    this.notifyAll();
     System.out.println("Ya me pude bajar" +Thread.currentThread().getName()+ "cantidad "+cantAdentro);
     
 }
 
 public synchronized void avisarLlegadaDestino(){
     bajarse=true;
-
-     System.out.println("--------------COLECTIVO LLEGO A DESTINO---------");
+    System.out.println("--------------COLECTIVO LLEGO A DESTINO---------");
     this.notifyAll();
 }
 
@@ -65,7 +62,7 @@ public synchronized void posicionarseEnPuerta(){
 
 public synchronized void iniciarViaje(){
     while(cantAdentro<capacidadMaxima){
-             try {
+        try {
             this.wait();
         } catch (InterruptedException e) {
           
