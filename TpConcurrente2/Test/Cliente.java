@@ -5,7 +5,7 @@ import Shop.*;
 import java.util.Random;
 import FaroMirador.*;
 import Restaurant.Restaurant;
-import Snorkel.*;
+import CarreraGomones.*;
 
 
 public class Cliente implements Runnable {
@@ -15,24 +15,26 @@ public class Cliente implements Runnable {
     private CentroCompras shop;
     private Restaurant r;
     private Mirador m;
-    private CentroSnorkel s;
+    private Rio rio;
+   
 
 
-    public Cliente (Restaurant r,Entrada e, ColectivoFolklorico c, CentroCompras shop,  Mirador m, CentroSnorkel s){
-        this.s=s;
+    public Cliente (Restaurant r,Entrada e, ColectivoFolklorico c, CentroCompras shop,  Mirador m, Rio rio){
+        
         this.r=r;
         this.e=e;
         this.c=c;
         this.shop=shop;
         this.m=m;
+        this.rio=rio;
     }
 
 
     public void run (){
         Random random= new Random();
-     
-        this.realizarNadoSnorkel();
         
+        rio.liberarGomon();
+        rio.bajarse();
     
     
     }
@@ -49,9 +51,6 @@ public class Cliente implements Runnable {
 
     public void realizarNadoSnorkel() {
 
-        s.pedirElementos();
-        this.simula();
-        s.devolverEquipo();
 
 
     }
