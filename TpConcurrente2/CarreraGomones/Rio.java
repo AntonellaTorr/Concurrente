@@ -18,6 +18,7 @@ public class Rio {
     private Semaphore mandarDoble;
     private Semaphore clientesBajarse;
     private Semaphore puedenTirarse;
+    private int cantEnRio;
 
     public Rio(int cantIndivuales, int cantDobles, int cantGomonesQueSePuedenTirar) {
 
@@ -27,15 +28,15 @@ public class Rio {
         this.cantGomonesQueSeTiraron = 0;
 
         gomonesIndividuales = new Semaphore(this.cantIndividuales);
-        gomonesDobles = new Semaphore(this.cantDobles*2);
+        gomonesDobles = new Semaphore(this.cantDobles * 2);
         mutex = new Semaphore(1);
         clientesBajarse = new Semaphore(0);
 
         ganador = new Semaphore(1);
         barrera = new CyclicBarrier(cantGomonesQueSePuedenTirar);
         puedenTirarse = new Semaphore(cantGomonesQueSePuedenTirar);
-        mandarSimple= new Semaphore(0);
-        mandarDoble=new Semaphore(0);
+        mandarSimple = new Semaphore(0);
+        mandarDoble = new Semaphore(0);
 
     }
 
@@ -44,16 +45,16 @@ public class Rio {
         try {
             Random r = new Random();
             if (r.nextInt(2) % 2 == 0) {
-             
+
                 gomonesIndividuales.acquire();
-              //  System.out.println(Thread.currentThread().getName() + " se subio a uno indivual" + " PERMISOS SIMPLE"+ gomonesIndividuales.availablePermits());
+                System.out.println(Thread.currentThread().getName() + " se subio a uno"+
+                " indivual" );
                 mandarSimple.release();
 
             } else {
 
-          
                 gomonesDobles.acquire();
-              //  System.out.println(Thread.currentThread().getName() + " se subio a uno doble" + " PERMISOS doble "+ gomonesDobles.availablePermits());
+                System.out.println(Thread.currentThread().getName() + " se subio a uno doble");
                 mandarDoble.release();
             }
         } catch (InterruptedException e) {
@@ -76,26 +77,29 @@ public class Rio {
     // metodos de los gomones
 
     public void correrCarrera(int tipo) {
-        System.out.println("GANADOR PERMISOS " +ganador.availablePermits());
         try {
             if (tipo == 1) {
                 mandarSimple.acquire();
-                System.out.println(Thread.currentThread().getName() + "se tomo un individual");
+               // System.out.println(Thread.currentThread().getName() + "se tomo un individual");
 
             } else {
                 mandarDoble.acquire(2);
-                System.out.println(Thread.currentThread().getName() + "se tomo uno doble ");
+                //System.out.println(Thread.currentThread().getName() + "se tomo uno doble ");
 
             }
             puedenTirarse.acquire();
-            System.out.println(Thread.currentThread().getName() +"PUEDEN TIRARSE PERMISOS" + puedenTirarse.availablePermits());
+        
+           
 
             barrera.await();
-
+            
             mutex.acquire();
             cantGomonesQueSeTiraron++;
+            
+            cantEnRio++;
             if (cantGomonesQueSeTiraron == cantGomonesQueSePuedenTirar) {
                 System.out.println("-------------------SE RESETEA LA BARRERA-------------------");
+                System.out.println(" SOY EL ULTIMO EN SALIR : cantidad en rio "+cantEnRio);
                 cantGomonesQueSeTiraron = 0;
                 barrera.reset();
             }
@@ -112,17 +116,33 @@ public class Rio {
     }
 
     public void finalizarCarrera() {
-        if (ganador.tryAcquire()) {
-            System.out.println(Thread.currentThread().getName() + " GANO");
+        try {
+             if (ganador.tryAcquire()) {
+                System.out.println(Thread.currentThread().getName() + " GANO !!!!!!!!!!!!!!!!!!!!1");
 
-            gomonesIndividuales.release(cantIndividuales);
-            gomonesDobles.release(cantDobles*2);
-            puedenTirarse.release(cantGomonesQueSePuedenTirar);
+            }
+            mutex.acquire();
+            cantEnRio--;           
+            //es decir soy el ultimo
+            if (cantEnRio==0){
+                mutex.release();
+                gomonesIndividuales.release(cantIndividuales);
+                gomonesDobles.release(cantDobles * 2);
+                puedenTirarse.release(cantGomonesQueSePuedenTirar);
 
-            clientesBajarse.release(cantIndividuales + cantDobles * 2);
-            ganador.release();
+                clientesBajarse.release(cantIndividuales + cantDobles * 2);
+                ganador.release();
+               
+            }else{
+                mutex.release();
+            }
+        
+          
 
+        } catch (Exception e) {
+            // TODO: handle exception
         }
+
     }
 
 }
