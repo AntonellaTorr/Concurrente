@@ -19,6 +19,7 @@ public class Rio {
     private Semaphore clientesBajarse;
     private Semaphore puedenTirarse;
     private int cantEnRio;
+    private int cantIndActual, cantDoblesActual;
 
     public Rio(int cantIndivuales, int cantDobles, int cantGomonesQueSePuedenTirar) {
 
@@ -37,6 +38,7 @@ public class Rio {
         puedenTirarse = new Semaphore(cantGomonesQueSePuedenTirar);
         mandarSimple = new Semaphore(0);
         mandarDoble = new Semaphore(0);
+        cantEnRio=0;
 
     }
 
@@ -49,11 +51,13 @@ public class Rio {
                 gomonesIndividuales.acquire();
                 System.out.println(Thread.currentThread().getName() + " se subio a uno"+
                 " indivual" );
+           
                 mandarSimple.release();
 
             } else {
 
                 gomonesDobles.acquire();
+              
                 System.out.println(Thread.currentThread().getName() + " se subio a uno doble");
                 mandarDoble.release();
             }
@@ -80,10 +84,12 @@ public class Rio {
         try {
             if (tipo == 1) {
                 mandarSimple.acquire();
+              
                // System.out.println(Thread.currentThread().getName() + "se tomo un individual");
 
             } else {
                 mandarDoble.acquire(2);
+             
                 //System.out.println(Thread.currentThread().getName() + "se tomo uno doble ");
 
             }
@@ -94,6 +100,16 @@ public class Rio {
             barrera.await();
             
             mutex.acquire();
+
+            if (tipo==1){
+                cantIndActual++;
+          
+
+            }
+            else{
+                cantDoblesActual++;
+           
+            }
             cantGomonesQueSeTiraron++;
             
             cantEnRio++;
@@ -125,17 +141,21 @@ public class Rio {
             cantEnRio--;           
             //es decir soy el ultimo
             if (cantEnRio==0){
-                mutex.release();
-                gomonesIndividuales.release(cantIndividuales);
-                gomonesDobles.release(cantDobles * 2);
-                puedenTirarse.release(cantGomonesQueSePuedenTirar);
-
-                clientesBajarse.release(cantIndividuales + cantDobles * 2);
+            
+                //EERRORRRR
+                gomonesIndividuales.release(cantIndActual);
+                gomonesDobles.release(cantDoblesActual*2);
+                clientesBajarse.release(cantIndActual + cantDoblesActual*2);
+                cantIndActual=0;
+                cantDoblesActual=0;
                 ganador.release();
+                puedenTirarse.release(cantGomonesQueSePuedenTirar);
                
-            }else{
-                mutex.release();
+              
             }
+
+            mutex.release();
+            
         
           
 

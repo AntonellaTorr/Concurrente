@@ -34,7 +34,7 @@ public class Main {
      
 
 
-        Thread []c= new Thread[16];
+        Thread []c= new Thread[15];
         Thread []dobles= new Thread[5];
         Thread []simples= new Thread[3];
         Thread empCole= new Thread(new EmpleadoColectivoFolklorico(cole));
