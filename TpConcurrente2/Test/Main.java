@@ -28,15 +28,14 @@ public class Main {
         Thread cocinero2= new Thread(new Cocinero(r, 'm'));
 
 
-  
+       Rio rio= new Rio(3, 5, 4);
 
         
      
 
 
-        Thread []c= new Thread[15];
-        Thread []dobles= new Thread[5];
-        Thread []simples= new Thread[3];
+        Thread []c= new Thread[20];
+        Thread []g= new Thread[8];
         Thread empCole= new Thread(new EmpleadoColectivoFolklorico(cole));
         Thread en= new Thread(new Encargado(m));
 
@@ -48,26 +47,10 @@ public class Main {
   
        cocinero1.start();
        cocinero2.start();
-       */
-     
-       Rio rio = new  Rio(3, 5, 4);
-       for (int i=0;i<5;i++){
-              dobles[i]= new Thread(new Gomon(2,rio), "Gomon doble "+i + " ");
-       }
-        for (int i=0;i<3;i++){
-              simples[i]= new Thread(new Gomon(1,rio),  "Gomon simple "+i +" ");
-       }
-
-          
-       for (int i=0;i<5;i++){
-              dobles[i].start();
-       }
-        for (int i=0;i<3;i++){
-              simples[i].start();
-       }
-
+*/
+   
         for (int i=0; i<c.length;i++){
-           c[i]= new Thread (new Cliente(r, e, cole, centro,m, rio), "Cliente "+i );
+           c[i]= new Thread (new Cliente(r, e, cole, centro,m,rio), "Cliente "+i );
 
 
         }
@@ -75,6 +58,21 @@ public class Main {
             c[i].start();
 
         }
+        
+        for (int i=0; i<3;i++){
+           g[i]= new Thread (new Gomon(1,rio) );
+
+        }
+       for (int i=3; i<8;i++){
+           g[i]= new Thread (new Gomon(2,rio) );
+       }
+
+       for (int i=0; i<8;i++){
+           g[i].start();
+       }
+
+  
+
 
         
  }   
