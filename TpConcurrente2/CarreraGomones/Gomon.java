@@ -1,4 +1,8 @@
-package CarreraGomones;
+package universidad.concurrente.tpFinal.Gomones;
+
+import java.util.LinkedList;
+
+
 
 public class Gomon implements Runnable {
     private int tipo;
@@ -8,10 +12,15 @@ public class Gomon implements Runnable {
         this.tipo=tipo;
         this.r=r;    
     }
+    
+  
+            
     public void run (){
+        while(true){
         r.correrCarrera(tipo);
         this.simular();
         r.finalizarCarrera();
+    }
     }
     
     public void simular (){

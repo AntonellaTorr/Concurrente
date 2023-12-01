@@ -9,19 +9,16 @@ package universidad.concurrente.tpFinal.Gomones;
  *
  * @author male_
  */
-
-
-public class Reseteador implements Runnable{
+public class ReseteadorBarreraDeSalida implements Runnable{
 
     private Rio r;
 
-    public Reseteador(Rio r){
+    public ReseteadorBarreraDeSalida(Rio r){
         this.r=r;
     }
 
     public void run(){
-        System.out.println("FINALIZO LA CARRERA");
+        System.out.println("EMPEZO LA CARRERA");
         
-        r.resetearJuego();
     }
 }

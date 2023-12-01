@@ -1,9 +1,17 @@
-package CarreraGomones;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package universidad.concurrente.tpFinal.Gomones;
+
 
 import java.util.Random;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Semaphore;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 //no van a poder hacer acquire de nuevos gomones si no terminaron 
 public class Rio {
@@ -15,12 +23,13 @@ public class Rio {
     private Semaphore mandarSimple;//Rendevous entre clientes y gomones
     private Semaphore mandarDoble;//Rendevous entre clientes y gomones
     private Semaphore clientesBajarse;//Rendevous para avisar a los clientes que pueden bajarse 
+    private Semaphore esperarParaEmpezarLaCarrera; //para que no empiece una carrera antes de que finalice la otra
 
     private CyclicBarrier barrera, meta;//Representan las lineas de meta y de llegada 
     private int cantIndActual, cantDoblesActual;//La cantidad de cada tipo de gomon que se tiro en un juego 
 
 
-    private Thread reseteadorMeta;
+    private Thread reseteadorMeta, reseteadorBarrera;
 
     public Rio(int cantIndivuales, int cantDobles, int cantGomonesQueSePuedenTirar) {
 
@@ -35,35 +44,36 @@ public class Rio {
         ganador = new Semaphore(1);
         mandarSimple = new Semaphore(0);
         mandarDoble = new Semaphore(0);
+        esperarParaEmpezarLaCarrera= new Semaphore(cantGomonesQueSePuedenTirar);
     
 
         reseteadorMeta= new Thread(new Reseteador(this));
+        reseteadorBarrera = new Thread(new ReseteadorBarreraDeSalida(this)) ;
+       
        
 
-        barrera = new CyclicBarrier(cantGomonesQueSePuedenTirar);
+        barrera = new CyclicBarrier(cantGomonesQueSePuedenTirar, reseteadorBarrera);
         meta = new CyclicBarrier(cantGomonesQueSePuedenTirar, reseteadorMeta);
 
        
 
     }
-
+    
+ 
+    
+    
     // metodos cliente
-    public void liberarGomon() {
+    public void liberarGomon(int tipo) {
         try {
-            Random r = new Random();
-            if (r.nextInt(2) % 2 == 0) {
+             if (tipo==1){
 
                 gomonesIndividuales.acquire();
-                System.out.println(Thread.currentThread().getName() + " se subio a uno" +
-                        " indivual");
-
+                System.out.println(Thread.currentThread().getName() + " agarro un gomon individual");
                 mandarSimple.release();
 
             } else {
-
                 gomonesDobles.acquire();
-
-                System.out.println(Thread.currentThread().getName() + " se subio a uno doble");
+                System.out.println(Thread.currentThread().getName() + "agarro un gomon doble");
                 mandarDoble.release();
             }
         } catch (InterruptedException e) {
@@ -76,7 +86,7 @@ public class Rio {
         try {
             clientesBajarse.acquire();
 
-            System.out.println(Thread.currentThread().getName() + " se bajo");
+            System.out.println(Thread.currentThread().getName() + " ya termino de correr, asi que se fue");
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -89,18 +99,17 @@ public class Rio {
         try {
             if (tipo == 1) {
                 mandarSimple.acquire();
-
-                // System.out.println(Thread.currentThread().getName() + "se tomo un
-                // individual");
+                System.out.println("--------HAY UN GOMON INDIVIDUAL ESPERANDO EN LA BARRERA------");
 
             } else {
                 mandarDoble.acquire(2);
+                System.out.println("--------HAY UN GOMON DOBLE LLENO ESPERANDO EN LA BARRERA------");
 
                 // System.out.println(Thread.currentThread().getName() + "se tomo uno doble ");
 
             }
 
-            //puedenTirarse.acquire();
+            esperarParaEmpezarLaCarrera.acquire();
             barrera.await();
 
             mutex.acquire();
@@ -147,21 +156,21 @@ public class Rio {
     }*/
 
     public void resetearJuego() {
-    
         try {
-            meta.reset();
             mutex.acquire();
-                gomonesIndividuales.release(cantIndActual);
-                gomonesDobles.release(cantDoblesActual * 2);
-                clientesBajarse.release((cantIndActual + (cantDoblesActual * 2)));
-                cantIndActual = 0;
-                cantDoblesActual = 0;
+            gomonesIndividuales.release(cantIndActual);
+            gomonesDobles.release(cantDoblesActual * 2);
+            clientesBajarse.release((cantIndActual + (cantDoblesActual * 2)));
+            cantIndActual = 0;
+            cantDoblesActual = 0;
+            ganador.release();
+            esperarParaEmpezarLaCarrera.release(cantGomonesQueSePuedenTirar);
             mutex.release();
-        } catch (InterruptedException e) {
-
-            e.printStackTrace();
+            
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Rio.class.getName()).log(Level.SEVERE, null, ex);
         }
-        ganador.release();
+        
                
 
     }
