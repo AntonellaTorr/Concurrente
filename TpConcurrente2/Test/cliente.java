@@ -22,11 +22,11 @@ public class cliente implements Runnable {
 
 
     public void run (){
-        System.out.println(Thread.currentThread().getName()+ " se desperto");
-        rio.liberarGomon(1);
-        rio.bajarse();
-    
-    
+     Random r = new Random();
+            if (r.nextInt(2) % 2 == 0)
+                 rio.liberarGomon(1);
+            else
+                rio.liberarGomon(2);
     }
   
 
