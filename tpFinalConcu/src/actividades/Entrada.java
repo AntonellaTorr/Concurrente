@@ -2,6 +2,9 @@ package actividades;
 
 import java.util.concurrent.Semaphore;
 
+/*El ingreso al parque está indicado a través del paso de k molinetes. Una vez ingresado,
+el visitante puede optar por ir al shop o disfrutar de las actividades del parque. */
+
 public class Entrada {
    private Molinete[] molinetes;
    private int horaActual;

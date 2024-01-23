@@ -3,6 +3,16 @@ package Hilos;
 import actividades.Restaurant;
 import java.util.Random;
 
+
+/*
+Restaurante:
+En el pago del acceso al Parque se encuentra incluido el almuerzo y la
+merienda. Existen tres restaurantes, pero solamente se puede consumir un almuerzo
+y una merienda en cualquiera de ellos. Puede tomar el almuerzo en un restaurante y
+la merienda en otro. Los restaurantes tienen capacidad limitada. Las personas son
+atendidas en orden de llegada. Los restaurantes tienen habilitada una cola de espera.
+*/
+
 public class Cocinero implements Runnable {
     private Restaurant r;
     private char e;
@@ -14,7 +24,6 @@ public class Cocinero implements Runnable {
     }
 
     public void run (){
-        Random ran= new Random();
         while (true){
             if (e=='a'){
                 r.cocinarAlmuerzos();

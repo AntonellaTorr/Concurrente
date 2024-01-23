@@ -1,5 +1,10 @@
 package Transporte;
 
+/*
+Al parque se puede acceder en forma particular o por tour, en el caso del tour, se
+trasladan a través de colectivos folklóricos con una capacidad no mayor a 25 personas,
+que llegan a un estacionamiento destinado para tal fin
+*/
 
 public class ColectivoFolklorico {
 private int cantAdentro;
@@ -8,9 +13,9 @@ private boolean enPuerta;
 private boolean bajarse;
 
 
-public ColectivoFolklorico (int capacidadMaxima){
+public ColectivoFolklorico (){
     this.cantAdentro=0;
-    this.capacidadMaxima=capacidadMaxima;
+    this.capacidadMaxima=25; //Lo dice el enunciado
     this.bajarse=false;
     this.enPuerta=true;
 }

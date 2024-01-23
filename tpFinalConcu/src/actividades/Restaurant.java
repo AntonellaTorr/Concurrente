@@ -3,18 +3,17 @@ package actividades;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+/*
+Restaurante:
+En el pago del acceso al Parque se encuentra incluido el almuerzo y la
+merienda. Existen tres restaurantes, pero solamente se puede consumir un almuerzo
+y una merienda en cualquiera de ellos. Puede tomar el almuerzo en un restaurante y
+la merienda en otro. Los restaurantes tienen capacidad limitada. Las personas son
+atendidas en orden de llegada. Los restaurantes tienen habilitada una cola de espera.
+*/
+
 public class Restaurant {
-
     private int capacidad, nroRes;
-    /*private ReentrantLock mutexAlmuerzo= new ReentrantLock();
-    private ReentrantLock mutexMerienda= new ReentrantLock();
-    private ReentrantLock mutexIngreso= new ReentrantLock();
-
-    private Condition hayAlmuerzos= mutexAlmuerzo.newCondition();
-    private Condition hayMeriendas= mutexMerienda.newCondition();
-    private Condition hayLugar= mutexIngreso.newCondition()Â¨
-    */
-
     private int cantAlmuerzosDisponibles, cantMeriendasDisponibles, cantPersonasAdentro;
 
 
@@ -42,7 +41,7 @@ public class Restaurant {
         cantPersonasAdentro++;
     }
     
-    public synchronized void consumirAlmuerzo(){
+    public synchronized int consumirAlmuerzo(){
         while(cantAlmuerzosDisponibles==0){
             try {
                 this.notifyAll();
@@ -51,10 +50,10 @@ public class Restaurant {
             }
         }
         cantAlmuerzosDisponibles--;
-        System.out.println(Thread.currentThread().getName()+ " consumio almuerzo en " +nroRes);
+        return nroRes;
     }
     
-    public synchronized void consumirMerienda(){
+    public synchronized int consumirMerienda(){
         while(cantMeriendasDisponibles==0){
             try {
                   this.notifyAll();
@@ -65,13 +64,13 @@ public class Restaurant {
               
         }
         cantMeriendasDisponibles--;
-          System.out.println(Thread.currentThread().getName()+ " consumio merienda en "+nroRes);
+         return nroRes;
     }
     
-    public synchronized void salirRestaurante(){
+    public synchronized int salirRestaurante(){
         cantPersonasAdentro--;
         this.notifyAll();
-         System.out.println(Thread.currentThread().getName()+ " se fue de "+nroRes);
+        return nroRes;
     }
     
     

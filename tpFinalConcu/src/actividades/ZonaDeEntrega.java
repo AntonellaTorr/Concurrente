@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
-*/
 package actividades;
 
 import java.util.concurrent.locks.Condition;
@@ -11,10 +6,15 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author male_
- */
+/*
+Disfruta de Snorkel ilimitado
+existe la posibilidad de realizar snorkel en una laguna, para lo cual es necesario 
+adquirir previamente el equipo de snorkel, salvavidas y patas de ranas, que deberán 
+ser devueltos al momento de finalizar la actividad. En el ingreso a la actividad hay 
+un stand donde dos asistentes entregan el equipo mencionado. La única limitación en 
+cuanto a capacidad es dada por la cantidad de equipos completos (snorkel, salvavidas y patas de rana) existentes.
+*/
+
 public class ZonaDeEntrega {
 
     private int cantClienteEsperando;
@@ -37,7 +37,6 @@ public class ZonaDeEntrega {
 
     public void avisarEncargado() {
         lock.lock();
-        System.out.println(Thread.currentThread().getName() + " Entre a la zona de entrega y le aviso al encargado");
         cantClienteEsperando++;
         esperaEncargado.signal();
         while (cantEncargados <= 0) { // mientras no haya encargados espero
@@ -67,16 +66,12 @@ public class ZonaDeEntrega {
     public void hacerFilaPatasRana() {
         lock.lock();
         cantEncargados++;
-        System.out.println("-------");
-        System.out.println(Thread.currentThread().getName() + " Voy a esperar por las mf patas de runnable");
-        System.out.println("------");
         while (cantPatasDeRana <= 0) {
             try {
                 esperaPorPatasDeRana.await();
             } catch (Exception e) {
             }
         }
-        System.out.println(Thread.currentThread().getName() + "supuestamente hay patas de rana : " + cantPatasDeRana);
         // me desperte porque hay patas de rana (ahora solo necesito que el encargado
         // "me las de"
         while (cantEncargados == 0) {
@@ -90,23 +85,18 @@ public class ZonaDeEntrega {
         cantPatasDeRana--;
         cantEncargados++;
         esperaCliente.signal();
-        System.out.println(Thread.currentThread().getName() + "CONSEGUI PTAS D RANA");
         lock.unlock();
     }
 
     public void hacerFilaSalvavidas() {
         lock.lock();
         cantEncargados++;
-        System.out.println("-------");
-        System.out.println(Thread.currentThread().getName() + " Voy a esperar por un salvavidas");
-        System.out.println("------");
         while (cantSalvavidas <= 0) {
             try {
                 esperaPorSalvavidas.await();
             } catch (Exception e) {
             }
         }
-        System.out.println(Thread.currentThread().getName() + "supuestamente hay salvavidas : " + cantSalvavidas);
         // me desperte porque hay patas de rana (ahora solo necesito que el encargado
         // "me las de"
         while (cantEncargados == 0) {
@@ -120,25 +110,18 @@ public class ZonaDeEntrega {
         cantSalvavidas--;
         cantEncargados++;
         esperaCliente.signal();
-        System.out.println(Thread.currentThread().getName() + "CONSEGUI Salvdaa");
         lock.unlock();
     }
 
     public void hacerFilaSnorkel() {
         lock.lock();
         cantEncargados++;
-        System.out.println("-------");
-        System.out.println(Thread.currentThread().getName() + " Voy a esperar por un snorkel");
-        System.out.println("------");
         while (cantSnorkel <= 0) {
             try {
                 esperaPorSnorkel.await();
             } catch (Exception e) {
             }
         }
-        System.out.println(Thread.currentThread().getName() + "supuestamente hay snorkel: " + cantSnorkel);
-        // me desperte porque hay patas de rana (ahora solo necesito que el encargado
-        // "me las de"
         while (cantEncargados == 0) {
             try {
                 esperaCliente.await();
@@ -150,13 +133,11 @@ public class ZonaDeEntrega {
         cantSnorkel--;
         cantEncargados++;
         esperaCliente.signal();
-        System.out.println(Thread.currentThread().getName() + "CONSEGUI SKNOREL");
         lock.unlock();
     }
 
     public void salirDeLaPileta() {
         lock.lock();
-        System.out.println(Thread.currentThread().getName() + " ME VOY PUTOS");
         cantPatasDeRana++;
         esperaPorPatasDeRana.signal();
         cantSnorkel++;

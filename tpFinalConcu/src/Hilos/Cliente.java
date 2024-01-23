@@ -11,7 +11,7 @@ import actividades.Mirador;
 import actividades.Restaurant;
 import actividades.Rio;
 import actividades.ZonaDeEntrega;
-import Transporte.Tren
+import Transporte.Tren;
 import static java.lang.Math.random;
 
 
@@ -47,15 +47,15 @@ public class Cliente implements Runnable {
         System.out.println(Thread.currentThread().getName()+" Ya entro al parque");
         this.entradaAlParque();
         this.disfrutarActividades();
-        System.out.println(Thread.currentThread().getName()+ "Se va del parque!");
+        System.out.println(Thread.currentThread().getName()+ " Se va del parque!");
 
     
     }
   
 
-    public void simula(){
+    public void simular(int nro){
         try{
-            Thread.sleep(100);
+            Thread.sleep(nro);
 
         }catch (Exception e){
         
@@ -106,37 +106,45 @@ public class Cliente implements Runnable {
                    this.snorkelitos();
                    break;
            }
-           nro=Random.nextInt(4);
+           nro=Random.nextInt(5);
         }
         
 }
     
     private void faroMirador(){
       m.entrarALaFila();
+      System.out.println(Thread.currentThread().getName()+": Estoy esperando en la fila");
       m.primeroDeLaFila();
       m.avisoEncargado();
       char tobogan= m.tirarsePorTobogan();
       System.out.println(Thread.currentThread().getName()+": Tirandose por el tobogan "+tobogan);
-      this.simular();
+      this.simular(2000);
       System.out.println(Thread.currentThread().getName()+": Termino de tirarse por el tobogan "+tobogan);
       m.liberarTobogan(tobogan);
+        System.out.println(Thread.currentThread().getName()+": Se fue del faro mirador");
     }
     
     private void restaurantep(){
+        int nroRes;
         r.ingresar();
-        r.consumirAlmuerzo();
-        r.consumirMerienda();
-        r.salirRestaurante();
+        nroRes=r.consumirAlmuerzo();
+        System.out.println(Thread.currentThread().getName()+ " consumio almuerzo en " +nroRes);
+        nroRes= r.consumirMerienda();
+        System.out.println(Thread.currentThread().getName()+ " consumio merienda en " +nroRes);
+        nroRes=r.salirRestaurante();
+        System.out.println(Thread.currentThread().getName()+" Se fue del restaurante "+nroRes);
     }
     
     private void snorkelitos(){
          z.avisarEncargado();
+        System.out.println(Thread.currentThread().getName() + " Entre a la zona de entrega para snorkel ilimitado y le aviso al encargado");
         z.hacerFilaPatasRana();
         z.hacerFilaSalvavidas();
         z.hacerFilaSnorkel();
-        System.out.println(Thread.currentThread().getName()+"Entre a la piletaaa");
-        this.simular()*2;
+        System.out.println(Thread.currentThread().getName()+" Esta disfrutando de la actividad snorkel ilimitado");
+        this.simular(4000);
         z.salirDeLaPileta();
+        System.out.println(Thread.currentThread().getName()+ " Se fue de la actividad de la pileta");
         }
     
     
@@ -159,9 +167,14 @@ public class Cliente implements Runnable {
             
         if(nroBolso==0)
             System.out.println(Thread.currentThread().getName()+" Paso a buscar su bolso con sus pertenencias");
+        
+        System.out.println(Thread.currentThread().getName()+ " Se fue de la actividad carrera de gomones");
     }
-
 }
+
+    
+
+
     
     
 
