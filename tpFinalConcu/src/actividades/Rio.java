@@ -96,8 +96,6 @@ public class Rio {
     public void bajarse() {
         try {
             clientesBajarse.acquire();
-
-            System.out.println(Thread.currentThread().getName() + " ya termino de correr, asi que se fue");
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -110,12 +108,8 @@ public class Rio {
         try {
             if (tipo == 1) {
                 mandarSimple.acquire();
-                System.out.println("--------HAY UN GOMON INDIVIDUAL ESPERANDO EN LA BARRERA------");
-
             } else {
                 mandarDoble.acquire(2);
-                System.out.println("--------HAY UN GOMON DOBLE LLENO ESPERANDO EN LA BARRERA------");
-
                 // System.out.println(Thread.currentThread().getName() + "se tomo uno doble ");
 
             }

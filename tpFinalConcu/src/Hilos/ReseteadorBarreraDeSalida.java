@@ -30,7 +30,6 @@ public class ReseteadorBarreraDeSalida implements Runnable{
     }
 
     public void run(){
-        System.out.println("EMPEZO LA CARRERA");
         
     }
 }

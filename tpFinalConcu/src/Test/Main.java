@@ -92,6 +92,11 @@ public class Main {
          System.out.println("Ingrese la cantidad de Clientes");
          int cantClientes = TecladoIn.readLineInt();
          
+         System.out.println("");
+         System.out.println("---------------------------");
+         System.out.println("---------------------------");
+         System.out.println("---------------------------");
+         System.out.println("");
          
          
          //CREACION E INICIALIZACION DE HILOS
@@ -157,18 +162,4 @@ public class Main {
         
  }
 }
- 
-        
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-        
+       

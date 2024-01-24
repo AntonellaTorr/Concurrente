@@ -6,7 +6,7 @@ import java.util.concurrent.Semaphore;
 el visitante puede optar por ir al shop o disfrutar de las actividades del parque. */
 
 public class Entrada {
-   private Molinete[] molinetes;
+   private Molinete[] molinetes; //cantidad que es ingresada por parametros
    private int horaActual;
    private Semaphore mutexHora;
    
@@ -23,11 +23,11 @@ public class Entrada {
        int molineteAEsperar=0, i;
        i=0;
        try {
-        mutexHora.acquire();
+            mutexHora.acquire();
         } catch (InterruptedException e) {
         e.printStackTrace();
         }
-
+       //si todavia es posible entrar al parque
        if(horaActual>=9 && horaActual<=17){
             mutexHora.release();
             //Busca un molinete libre

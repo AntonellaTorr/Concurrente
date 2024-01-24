@@ -39,7 +39,7 @@ public class ZonaDeEntrega {
         lock.lock();
         cantClienteEsperando++;
         esperaEncargado.signal();
-        while (cantEncargados <= 0) { // mientras no haya encargados espero
+        while (cantEncargados <= 0) { // mientras no haya encargados disponibles espero
             try {
                 esperaCliente.await();
             } catch (InterruptedException ex) {
@@ -58,8 +58,7 @@ public class ZonaDeEntrega {
             } catch (InterruptedException ex) {
                 Logger.getLogger(ZonaDeEntrega.class.getName()).log(Level.SEVERE, null, ex);
             }
-        System.out.println(Thread.currentThread().getName() + " hay un cliente esperando, lo atiendo");
-        cantClienteEsperando--; // disminuyo la cantidad d clientes esperando
+        cantClienteEsperando--; // cuando ya lo atendi disminuyo la cantidad de clientes esperando
         lock.unlock();
     }
 
@@ -97,7 +96,7 @@ public class ZonaDeEntrega {
             } catch (Exception e) {
             }
         }
-        // me desperte porque hay patas de rana (ahora solo necesito que el encargado
+        // me desperte porque hay salvavidas (ahora solo necesito que el encargado
         // "me las de"
         while (cantEncargados == 0) {
             try {

@@ -10,7 +10,7 @@ una de las dos cajas disponibles.
 
 
 public class CentroCompras {
-    private Semaphore cajasDisponibles= new Semaphore(2);
+    private Semaphore cajasDisponibles= new Semaphore(2); //lo aclara el enunciado
 
     public void irAPagar(){
 

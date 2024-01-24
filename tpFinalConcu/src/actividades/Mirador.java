@@ -23,7 +23,7 @@ public class Mirador {
     
     public Mirador(int cantEscalones){
         this.mutexChar= new Semaphore(1);
-        this.clienteAtendido= new Semaphore(1,true);
+        this.clienteAtendido= new Semaphore(1,true); //para simular que se atendera en orden
         this.mutexToboganDer= new Semaphore(1);
         this.mutexToboganIzq= new Semaphore(1);
         this.avisoEncargado= new Semaphore(0);
@@ -32,7 +32,6 @@ public class Mirador {
     }
     
     public void entrarALaFila(){
-
         try{
         cantMaxClientesFila.acquire();
         
@@ -86,7 +85,7 @@ public class Mirador {
         try {
             avisoEncargado.acquire();
             if(mutexToboganIzq.tryAcquire()){
-                System.out.println("Esta libre el tobogan de la izq");
+           //     System.out.println("Esta libre el tobogan de la izq");
                 mutexChar.acquire();
                 toboganLibre='I';
                 mutexChar.release();
@@ -94,7 +93,7 @@ public class Mirador {
             }
             else{
                 if(mutexToboganDer.tryAcquire()){
-                    System.out.println("Esta libre el tobogan de la der");
+               //     System.out.println("Esta libre el tobogan de la der");
                     mutexChar.acquire();
                     toboganLibre='D';
                     mutexChar.release();
@@ -103,16 +102,16 @@ public class Mirador {
                 else{
                     //estan los dos toboganes ocupados, el cliente se queda esperando en alguno random
                     int tob= (int)(Math.random()*2)+1;
-                    System.out.println("Estan los dos toboganes ocupados");
+                 //   System.out.println("Estan los dos toboganes ocupados");
                     if(tob==1){
                         mutexChar.acquire();
-                        System.out.println("Le dije al cliente que espere por el tobogan de la izq");
+                    //    System.out.println("Le dije al cliente que espere por el tobogan de la izq");
                         toboganLibre='I';
                         mutexChar.release();
                     }
                     else{
                         mutexChar.acquire();
-                        System.out.println("Le dije al cliente que espere por el tobogan de la der");
+                    //    System.out.println("Le dije al cliente que espere por el tobogan de la der");
                         toboganLibre='D';
                         mutexChar.release();
                 }

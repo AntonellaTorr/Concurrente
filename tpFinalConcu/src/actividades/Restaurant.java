@@ -82,9 +82,6 @@ public class Restaurant {
             }
         }
         cantMeriendasDisponibles=5;
-        System.out.println("----------------------cocinero----------------");
-          System.out.println(Thread.currentThread().getName()+ " cocino meriendas");
-          System.out.println("----------------------------------------------------");
         this.notifyAll();
     }
     
@@ -96,7 +93,6 @@ public class Restaurant {
             }
         }
         cantAlmuerzosDisponibles=5;
-         System.out.println(Thread.currentThread().getName()+ " cocino almuerzos");
         this.notifyAll();
     }
     

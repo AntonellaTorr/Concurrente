@@ -15,21 +15,22 @@ el tipo.
 */
 
 public class Tren {
-private int cantAdentro;
+private int cantAdentro; //para controlar que no se suban mas personas de la cantidad establecida
 private int capacidadMaxima;
-private boolean enPuerta;
-private boolean bajarse;
+private boolean enPuerta; //para que los clientes no se suban en cualquier lado
+private boolean bajarse; //para avisarle a los clientes que ya llegamos al inicio de la actividad
 
 
 public Tren (){
     this.cantAdentro=0;
-    this.capacidadMaxima=15;
+    this.capacidadMaxima=15; //lo dice el enunciado
     this.bajarse=false;
     this.enPuerta=true;
 }
 
 
 public synchronized void subirse(){
+    //metodo utilizado por el cliente
     //mientras que este lleno o no este en puerta espera
     while (cantAdentro>=capacidadMaxima || !enPuerta){
         try {
@@ -41,10 +42,10 @@ public synchronized void subirse(){
     }
     cantAdentro++;
     this.notifyAll();
-    System.out.println("Ya me pude subir" +Thread.currentThread().getName() +"cantidad "+cantAdentro);
 }
 
 public synchronized  void bajarse(){
+    //metodo utilizado por el cliente
     while (!bajarse){
          try {
             this.wait();
@@ -55,20 +56,16 @@ public synchronized  void bajarse(){
     }
     cantAdentro--;
     this.notifyAll();
-    System.out.println("Ya me pude bajar" +Thread.currentThread().getName()+ "cantidad "+cantAdentro);
-    
 }
 
 public synchronized void avisarLlegadaDestino(){
     bajarse=true;
-    System.out.println("--------------COLECTIVO LLEGO A DESTINO---------");
     this.notifyAll();
 }
 
 public synchronized void posicionarseEnPuerta(){
     bajarse=false;
     enPuerta=true;
-    System.out.println("--------------COLECTIVO EN PUERTA---------");
     this.notifyAll();
 
 }
@@ -83,10 +80,9 @@ public synchronized void iniciarViaje(){
         }
     }
     enPuerta=false;
-    System.out.println("--------------------------COLECTIVO INICIA VIAJE------------------------");
-
-
     }
+
+
 }
 
 

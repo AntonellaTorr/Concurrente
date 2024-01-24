@@ -31,8 +31,6 @@ public class Reseteador implements Runnable{
     }
 
     public void run(){
-        System.out.println("FINALIZO LA CARRERA");
-        
         r.resetearJuego();
     }
 }
