@@ -41,7 +41,7 @@ public class Restaurant {
         cantPersonasAdentro++;
     }
     
-    public synchronized int consumirAlmuerzo(){
+    public synchronized void consumirAlmuerzo(){
         while(cantAlmuerzosDisponibles==0){
             try {
                 this.notifyAll();
@@ -50,10 +50,9 @@ public class Restaurant {
             }
         }
         cantAlmuerzosDisponibles--;
-        return nroRes;
     }
     
-    public synchronized int consumirMerienda(){
+    public synchronized void consumirMerienda(){
         while(cantMeriendasDisponibles==0){
             try {
                   this.notifyAll();
@@ -64,13 +63,11 @@ public class Restaurant {
               
         }
         cantMeriendasDisponibles--;
-         return nroRes;
     }
     
-    public synchronized int salirRestaurante(){
+    public synchronized void salirRestaurante(){
         cantPersonasAdentro--;
         this.notifyAll();
-        return nroRes;
     }
     
     

@@ -39,6 +39,7 @@ public class Main {
         Tren trencito= new Tren();
         ColectivoFolklorico colectivoF= new ColectivoFolklorico();
         CentroCompras centroC = new CentroCompras();
+        Restaurant restos[] = new Restaurant [3];
         
         //ACTIVIDAD: Entrada al Parque
         System.out.println("Ingrese la cantidad de molinetes que debera tener la entrada al parque");
@@ -52,11 +53,11 @@ public class Main {
         Mirador miradorcito = new Mirador(nroEscaleras);
         
         //ACTIVIDAD: RESTAURANT
-        System.out.println("Ingrese la cantidad de restaurantes");
-        int cantRest= TecladoIn.readLineInt();
-        System.out.println("E ingrese tambien la capacidad de cada restaurantes (todos tendran la misma)");
+        System.out.println("Ingrese la capacidad de cada restaurantes (todos tendran la misma)");
         int capacRes=TecladoIn.readLineInt();
-        Restaurant resto = new Restaurant(capacRes,cantRest);
+        for (int i=0; i<restos.length; i++){
+            restos[i]= new Restaurant (capacRes, i);
+        }
         
         //ACTIVIDAD: SNORKEL ILIMITADO
         System.out.println("Ingrese la cantidad de patas de rana para la actividad Snorkel Ilimitado");
@@ -78,10 +79,8 @@ public class Main {
 
          
          //CREACION DEL PERSONAL 
-         System.out.println("Ingrese la cantidad de Cocineros que trabajaran en el Restaurante");
-         int cantCocineros= TecladoIn.readLineInt();
-         Cocinero c[]= new Cocinero[cantCocineros*2]; //Dado que debe haber la misma cantidad de cocineros de merienda y almuerzo
          
+     
          EncargadoFaroMirador empleadoFaro = new EncargadoFaroMirador(miradorcito);
          EmpleadoColectivoFolklorico empleadoCole = new EmpleadoColectivoFolklorico(colectivoF);
          EmpleadoTrenGomones empleadoTren = new EmpleadoTrenGomones(trencito);
@@ -92,19 +91,19 @@ public class Main {
          
          System.out.println("Ingrese la cantidad de Clientes");
          int cantClientes = TecladoIn.readLineInt();
-         Cliente cc[]= new Cliente[cantClientes];
+         
          
          
          //CREACION E INICIALIZACION DE HILOS
          Thread thCocineros[], thClientes [], thGomones[], thEmpleadoSnorkel[];
          Thread thEmpleadoColectivo, thEmpleadoFaro, thEmpleadoTren, thReloj, thReset, thResetSalida;
          
-         thCocineros= new Thread [cantCocineros];
+         thCocineros= new Thread [6];
          thClientes = new Thread [cantClientes];
          thEmpleadoColectivo = new Thread(empleadoCole, "Empleado Cole");
          thEmpleadoFaro = new Thread (empleadoFaro, "Empleado Faro");
          thEmpleadoTren = new Thread (empleadoTren, "Empleado Tren");
-         thEmpleadoSnorkel= new Thread [2];
+         thEmpleadoSnorkel= new Thread [empleadoSnorkel.length];
          thReloj = new Thread(relojito, "Reloj");
          thReset = new Thread (reset, "Reset");
          thResetSalida = new Thread (resetSalida, "Reset Salida");
@@ -122,19 +121,17 @@ public class Main {
             thEmpleadoSnorkel[i].start();
         }
          
-         for (int i = 0; i < cantCocineros; i++) {
-             if(i%2==0)
-                c[i]= new Cocinero(resto, 'a');
-             else
-                 c[i]= new Cocinero (resto,'m');
-            
-           thCocineros[i]= new Thread(c[i], "Cocinero"+i);
-           thCocineros[i].start();
-           
+       
+         for (int i = 0; i < thCocineros.length; i += 2) {
+            int restauranteAsignado = (i / 2);
+            thCocineros[i]= new Thread(new Cocinero(restos[restauranteAsignado],'a'), "Cocinero"+i);
+            thCocineros[i+1]= new Thread(new Cocinero(restos[restauranteAsignado],'m'), "Cocinero"+i+1);
+            thCocineros[i].start();
+            thCocineros[i+1].start();
         }
          
+         
        int k=0;
-       
        for (int i=0; i<cantGomonSim;i++){
            thGomones[k]= new Thread (new Gomon(1,rio) );
            k++;
@@ -152,7 +149,7 @@ public class Main {
        
        
         for (int j=0; j< cantClientes; j++){
-            thClientes [j]= new Thread(new Cliente(resto, entradita, colectivoF, centroC, miradorcito, rio, zona, trencito), "Cliente "+j);
+            thClientes [j]= new Thread(new Cliente(restos, entradita, colectivoF, centroC, miradorcito, rio, zona, trencito), "Cliente "+j);
             thClientes[j].start();
         }
         

@@ -20,7 +20,7 @@ public class Cliente implements Runnable {
     private Entrada e;
     private ColectivoFolklorico c;
     private CentroCompras shop;
-    private Restaurant r;
+    private Restaurant r[];
     private Mirador m;
     private Rio rio;
     private Random Random= new Random();
@@ -29,7 +29,7 @@ public class Cliente implements Runnable {
 
 
 
-    public Cliente (Restaurant r,Entrada e, ColectivoFolklorico c, CentroCompras shop,  Mirador m, Rio rio, ZonaDeEntrega z, Tren t){
+    public Cliente (Restaurant r[],Entrada e, ColectivoFolklorico c, CentroCompras shop,  Mirador m, Rio rio, ZonaDeEntrega z, Tren t){
         
         this.r=r;
         this.e=e;
@@ -125,14 +125,19 @@ public class Cliente implements Runnable {
     }
     
     private void restaurantep(){
-        int nroRes;
-        r.ingresar();
-        nroRes=r.consumirAlmuerzo();
-        System.out.println(Thread.currentThread().getName()+ " consumio almuerzo en " +nroRes);
-        nroRes= r.consumirMerienda();
-        System.out.println(Thread.currentThread().getName()+ " consumio merienda en " +nroRes);
-        nroRes=r.salirRestaurante();
-        System.out.println(Thread.currentThread().getName()+" Se fue del restaurante "+nroRes);
+        int indiceRestaurante = Random.nextInt(r.length);
+        r[indiceRestaurante].ingresar();
+        r[indiceRestaurante].consumirAlmuerzo();
+        System.out.println(Thread.currentThread().getName()+ " consumio almuerzo en " +indiceRestaurante);
+        r[indiceRestaurante].salirRestaurante();
+        System.out.println(Thread.currentThread().getName()+" Termino de consumir su almuerzo en el resto "+indiceRestaurante);
+        //y ahora la merienda
+        indiceRestaurante = Random.nextInt(r.length);
+        r[indiceRestaurante].ingresar();
+        r[indiceRestaurante].consumirMerienda();
+        System.out.println(Thread.currentThread().getName()+ " consumio merienda en " +indiceRestaurante);
+        r[indiceRestaurante].salirRestaurante();
+        System.out.println(Thread.currentThread().getName()+" Termino de consumir su merienda en el resto "+indiceRestaurante);
     }
     
     private void snorkelitos(){
