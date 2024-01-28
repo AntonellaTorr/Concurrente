@@ -88,7 +88,7 @@ public class Cliente implements Runnable {
         //El cliente accedera a todas las actividades que quiera hasta o que cierre el parque o weno
         int nro=Random.nextInt(5);
         boolean consumicionIncluida=true;
-       while(nro!=4){
+       while(nro!=4 && e.getHora()<18){
            switch(nro){
                case 0:
                      System.out.println(Thread.currentThread().getName()+ " Decidio que ira a la actividad Faro-Mirador");

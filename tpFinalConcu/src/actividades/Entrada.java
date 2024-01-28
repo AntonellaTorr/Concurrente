@@ -17,6 +17,9 @@ public class Entrada {
        mutexHora= new Semaphore(1);
   
    }
+   public int getHora(){
+    return horaActual;
+   }
    
    public int entrarAlParque(){
        boolean entro=false;
@@ -77,6 +80,7 @@ public class Entrada {
        else
            horaActual++;
 
+    System.out.println(" -----------La hora esss" + horaActual);
     mutexHora.release();
    }
     
