@@ -102,7 +102,7 @@ public class Cliente implements Runnable {
                    }
                    break;
                case 2:
-                    if(meriendaNoConsumida){ //para que solamente puedan ir una vez a merendar
+                    if(!almuerzoNoConsumido && meriendaNoConsumida){ //si ya consumio el almuerzo y no la merienda 
                         System.out.println(Thread.currentThread().getName()+ ": Decidio que ira a merendar");
                         this.merienda();
                         meriendaNoConsumida=false;
