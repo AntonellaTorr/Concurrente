@@ -11,13 +11,15 @@ private int cantAdentro; //para controlar que no se suban clientes de mas
 private int capacidadMaxima;
 private boolean enPuerta; //para que no intenten subirse los clientes en cualquier lado
 private boolean bajarse; //para avisar a los clientes que ya se llego al parque
+private int timeout; // Tiempo de espera en milisegundos
 
 
-public ColectivoFolklorico (){
+public ColectivoFolklorico (int tiempoDeEspera){
     this.cantAdentro=0;
     this.capacidadMaxima=25; //Lo dice el enunciado
     this.bajarse=false;
     this.enPuerta=true;
+    this.timeout=tiempoDeEspera;
 }
 
 
@@ -25,11 +27,19 @@ public synchronized void subirse(){
     //metodo utilizado por el cliente
     //mientras que este lleno o no este en puerta espera
     while (cantAdentro>=capacidadMaxima || !enPuerta){
-        try {
-            this.wait();
+       try {
+            if (timeout > 0) {
+                this.wait(timeout); // Espera con un tiempo límite
+            } else {
+                this.wait(); // Espera indefinida
+            }
         } catch (InterruptedException e) {
-          
             e.printStackTrace();
+        }
+
+        // Si se agotó el tiempo de espera y no se alcanzó la capacidad, el hilo se libera
+        if (timeout > 0 && cantAdentro < capacidadMaxima) {
+            return;
         }
     }
     cantAdentro++;

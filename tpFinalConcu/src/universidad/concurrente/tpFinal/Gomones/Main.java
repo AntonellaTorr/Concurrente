@@ -6,7 +6,7 @@
 package universidad.concurrente.tpFinal.Gomones;
 
 import Hilos.cliente;
-import Transporte.Gomon;
+import Hilos.Gomon;
 import utiles.TecladoIn;
 
 /**

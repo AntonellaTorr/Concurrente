@@ -16,7 +16,7 @@ import Hilos.Reloj;
 import Hilos.Reseteador;
 import Hilos.ReseteadorBarreraDeSalida;
 import Transporte.ColectivoFolklorico;
-import Transporte.Gomon;
+import Hilos.Gomon;
 import Transporte.Tren;
 import actividades.CentroCompras;
 import actividades.Entrada;
@@ -37,7 +37,7 @@ public class Main {
         
         //CLASES CON CAPACIDADES DEFINIDAS EN EL ENUNCIADO
         Tren trencito= new Tren();
-        ColectivoFolklorico colectivoF= new ColectivoFolklorico();
+        ColectivoFolklorico colectivoF= new ColectivoFolklorico(10000);
         CentroCompras centroC = new CentroCompras();
         Restaurant restos[] = new Restaurant [3];
         
