@@ -87,28 +87,37 @@ public class Cliente implements Runnable {
     private void disfrutarActividades(){
         //El cliente accedera a todas las actividades que quiera hasta o que cierre el parque o weno
         int nro=Random.nextInt(5);
-        boolean consumicionIncluida=true;
-       while(nro!=4 && e.getHora()<18 && e.getHora()>=9){
+        boolean almuerzoNoConsumido=true, meriendaNoConsumida=true;
+       while(nro!=5 && e.getHora()<18 && e.getHora()>=9){
            switch(nro){
                case 0:
                      System.out.println(Thread.currentThread().getName()+ " Decidio que ira a la actividad Faro-Mirador");
                      this.faroMirador();
                      break;
                case 1:
-                   if(consumicionIncluida){ //para que solamente puedan ir una vez al restaurante
-                    System.out.println(Thread.currentThread().getName()+ ": Decidio que ira al restaurante");
-                    this.restaurantep();
-                    consumicionIncluida=false;
+                   if(almuerzoNoConsumido){ //para que solamente puedan ir una vez a almorzar 
+                        System.out.println(Thread.currentThread().getName()+ ": Decidio que ira a almorzar");
+                        this.almuerzo();
+                        almuerzoNoConsumido=false;
                    }
                    break;
                case 2:
+                    if(meriendaNoConsumida){ //para que solamente puedan ir una vez a merendar
+                        System.out.println(Thread.currentThread().getName()+ ": Decidio que ira a merendar");
+                        this.merienda();
+                        meriendaNoConsumida=false;
+                    }
+                   break;
+               case 3:
                    System.out.println(Thread.currentThread().getName()+": Decidio que ira a la carrera de Gomones");
                    this.carrerita();
                    break;
-               case 3:
+               case 4:
                    System.out.println(Thread.currentThread().getName()+ ": Decidio que ira a la actividad Snorkel Ilimitado");
                    this.snorkelitos();
                    break;
+            
+
            }
            nro=Random.nextInt(5);
         }
@@ -128,7 +137,7 @@ public class Cliente implements Runnable {
       System.out.println(Thread.currentThread().getName()+": Se fue del faro mirador");
     }
     
-    private void restaurantep(){
+    private void almuerzo(){
         int indiceRestaurante = Random.nextInt(r.length); //Para decidir a que restaurante ira
         r[indiceRestaurante].ingresar();
         r[indiceRestaurante].consumirAlmuerzo();
@@ -136,16 +145,18 @@ public class Cliente implements Runnable {
         this.simular(1000);
         r[indiceRestaurante].salirRestaurante();
         System.out.println(Thread.currentThread().getName()+" Termino de consumir su almuerzo en el resto "+indiceRestaurante);
-        //y ahora la merienda
-        indiceRestaurante = Random.nextInt(r.length); //Para decidir a que restaurante ira
-        r[indiceRestaurante].ingresar();
-        r[indiceRestaurante].consumirMerienda();
-        System.out.println(Thread.currentThread().getName()+ " consumira su merienda en el resto " +indiceRestaurante);
-        this.simular(1000);
-        r[indiceRestaurante].salirRestaurante();
-        System.out.println(Thread.currentThread().getName()+" Termino de consumir su merienda en el resto "+indiceRestaurante);
+
+      
     }
-    
+    private void merienda (){
+          int indiceRestaurante = Random.nextInt(r.length); //Para decidir a que restaurante ira
+          r[indiceRestaurante].ingresar();
+          r[indiceRestaurante].consumirMerienda();
+          System.out.println(Thread.currentThread().getName()+ " consumira su merienda en el resto " +indiceRestaurante);
+          this.simular(1000);
+          r[indiceRestaurante].salirRestaurante();
+          System.out.println(Thread.currentThread().getName()+" Termino de consumir su merienda en el resto "+indiceRestaurante);
+    }    
     private void snorkelitos(){
          z.avisarEncargado();
         System.out.println(Thread.currentThread().getName() + ": Entre a la zona de entrega para snorkel ilimitado y le aviso al encargado");
