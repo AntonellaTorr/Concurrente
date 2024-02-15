@@ -21,7 +21,7 @@ public class Reloj implements Runnable {
     public void run(){
        while(true){
            try {
-               Thread.sleep(2000);
+               Thread.sleep(5000);
                entrada.pasarHora();
            } catch (InterruptedException ex) {
                Logger.getLogger(Reloj.class.getName()).log(Level.SEVERE, null, ex);

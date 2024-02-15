@@ -37,7 +37,7 @@ public class Main {
         
         //CLASES CON CAPACIDADES DEFINIDAS EN EL ENUNCIADO
         Tren trencito= new Tren();
-        ColectivoFolklorico colectivoF= new ColectivoFolklorico(10000);
+        ColectivoFolklorico colectivoF= new ColectivoFolklorico();
         CentroCompras centroC = new CentroCompras();
         Restaurant restos[] = new Restaurant [3];
         

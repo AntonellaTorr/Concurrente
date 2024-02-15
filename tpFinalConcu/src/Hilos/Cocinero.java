@@ -31,14 +31,14 @@ public class Cocinero implements Runnable {
             else{
                 r.cocinarMeriendas();
             }
-            this.simular();
+            this.simular(); //para simular el tiempo que le tomaria armar las 10 almuerzos / meriendas
            
 
         }
     }
     public void simular (){
         try {
-            Thread.sleep(500);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

@@ -16,6 +16,12 @@ import static java.lang.Math.random;
 
 
 public class Cliente implements Runnable {
+    
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_RESET = "\u001B[0m";
+   
+
 
     private Entrada e;
     private ColectivoFolklorico c;
@@ -44,10 +50,10 @@ public class Cliente implements Runnable {
 
     public void run (){
         this.irHastaElParque();
-        System.out.println(Thread.currentThread().getName()+" Ya entro al parque");
+        System.out.println(Thread.currentThread().getName()+ ANSI_YELLOW+" Ya entro al parque"+ ANSI_RESET);
         this.entradaAlParque();
         this.disfrutarActividades();
-        System.out.println(Thread.currentThread().getName()+ " Se va del parque!");
+        System.out.println(Thread.currentThread().getName()+ANSI_RED+ " Se va del parque!" + ANSI_RESET);
 
     
     }
@@ -67,19 +73,23 @@ public class Cliente implements Runnable {
             System.out.println(Thread.currentThread().getName()+" Accede al parque en un tour");
             c.subirse();
             c.bajarse();
-        }else
+        }else{
             System.out.println(Thread.currentThread().getName()+" Va caminando hasta el parque");
+            this.simular(2000); //para simular que accedera caminando
+        }
     }
     
     private void entradaAlParque() {
         int nroMolinete= e.entrarAlParque();
         e.entro(nroMolinete);
         if(Random.nextInt(2)==0){
-            System.out.println(Thread.currentThread().getName()+" entro al shop y se compro algo");
+            System.out.println("--SHOP--"+Thread.currentThread().getName()+" entro al shop y se compraá algo");
+            this.simular(1000); //para simular que esta eligiendo que comprar
             shop.irAPagar();
             shop.finalizarPago();
+            System.out.println("--SHOP--"+Thread.currentThread().getName()+ "termino de comprar en el shop");
         }else
-            System.out.println(Thread.currentThread().getName()+" Prefirio no entrar al shop");
+            System.out.println("--SHOP--"+Thread.currentThread().getName()+" Prefirio no entrar al shop");
     }
 
     
@@ -91,29 +101,29 @@ public class Cliente implements Runnable {
        while(nro!=5 && e.getHora()<18 && e.getHora()>=9){
            switch(nro){
                case 0:
-                     System.out.println(Thread.currentThread().getName()+ " Decidio que ira a la actividad Faro-Mirador");
+                     System.out.println("   "+Thread.currentThread().getName()+ " Decidio que ira a la actividad Faro-Mirador");
                      this.faroMirador();
                      break;
                case 1:
                    if(almuerzoNoConsumido){ //para que solamente puedan ir una vez a almorzar 
-                        System.out.println(Thread.currentThread().getName()+ ": Decidio que ira a almorzar");
+                        System.out.println("          "+Thread.currentThread().getName()+ ": Decidio que ira a almorzar");
                         this.almuerzo();
                         almuerzoNoConsumido=false;
                    }
                    break;
                case 2:
                     if(!almuerzoNoConsumido && meriendaNoConsumida){ //si ya consumio el almuerzo y no la merienda 
-                        System.out.println(Thread.currentThread().getName()+ ": Decidio que ira a merendar");
+                        System.out.println("          "+Thread.currentThread().getName()+ ": Decidio que ira a merendar");
                         this.merienda();
                         meriendaNoConsumida=false;
                     }
                    break;
                case 3:
-                   System.out.println(Thread.currentThread().getName()+": Decidio que ira a la carrera de Gomones");
+                   System.out.println("              "+Thread.currentThread().getName()+": Decidio que ira a la carrera de Gomones");
                    this.carrerita();
                    break;
                case 4:
-                   System.out.println(Thread.currentThread().getName()+ ": Decidio que ira a la actividad Snorkel Ilimitado");
+                   System.out.println("                     "+Thread.currentThread().getName()+ ": Decidio que ira a la actividad Snorkel Ilimitado");
                    this.snorkelitos();
                    break;
             
@@ -126,25 +136,25 @@ public class Cliente implements Runnable {
     
     private void faroMirador(){
       m.entrarALaFila();
-      System.out.println(Thread.currentThread().getName()+": Estoy esperando en la fila del Faro-Mirador");
+      System.out.println("  "+Thread.currentThread().getName()+": Estoy esperando en la fila del Faro-Mirador");
       m.primeroDeLaFila();
       m.avisoEncargado();
       char tobogan= m.tirarsePorTobogan();
-      System.out.println(Thread.currentThread().getName()+": Tirandose por el tobogan "+tobogan);
-      this.simular(2000);
-      System.out.println(Thread.currentThread().getName()+": Termino de tirarse por el tobogan "+tobogan);
+      System.out.println("  "+Thread.currentThread().getName()+": Tirandose por el tobogan "+tobogan);
+      this.simular(3000); //para simular que se esta tirando del tobogan
+      System.out.println("  "+Thread.currentThread().getName()+": Termino de tirarse por el tobogan "+tobogan);
       m.liberarTobogan(tobogan);
-      System.out.println(Thread.currentThread().getName()+": Se fue del faro mirador");
+      System.out.println("  "+Thread.currentThread().getName()+": Se fue del faro mirador");
     }
     
     private void almuerzo(){
         int indiceRestaurante = Random.nextInt(r.length); //Para decidir a que restaurante ira
         r[indiceRestaurante].ingresar();
         r[indiceRestaurante].consumirAlmuerzo();
-        System.out.println(Thread.currentThread().getName()+ " consumira su almuerzo en el resto" +indiceRestaurante);
-        this.simular(1000);
+        System.out.println("          "+Thread.currentThread().getName()+ " consumira su almuerzo en el resto" +indiceRestaurante);
+        this.simular(3000); //para simular que esta almorzando
         r[indiceRestaurante].salirRestaurante();
-        System.out.println(Thread.currentThread().getName()+" Termino de consumir su almuerzo en el resto "+indiceRestaurante);
+        System.out.println("          "+Thread.currentThread().getName()+" Termino de consumir su almuerzo en el resto "+indiceRestaurante);
 
       
     }
@@ -152,39 +162,40 @@ public class Cliente implements Runnable {
           int indiceRestaurante = Random.nextInt(r.length); //Para decidir a que restaurante ira
           r[indiceRestaurante].ingresar();
           r[indiceRestaurante].consumirMerienda();
-          System.out.println(Thread.currentThread().getName()+ " consumira su merienda en el resto " +indiceRestaurante);
-          this.simular(1000);
+          System.out.println("          "+Thread.currentThread().getName()+ " consumira su merienda en el resto " +indiceRestaurante);
+          this.simular(3000); //para simular que esta merendando
           r[indiceRestaurante].salirRestaurante();
-          System.out.println(Thread.currentThread().getName()+" Termino de consumir su merienda en el resto "+indiceRestaurante);
+          System.out.println("          "+Thread.currentThread().getName()+" Termino de consumir su merienda en el resto "+indiceRestaurante);
     }    
     private void snorkelitos(){
          z.avisarEncargado();
-        System.out.println(Thread.currentThread().getName() + ": Entre a la zona de entrega para snorkel ilimitado y le aviso al encargado");
+        System.out.println("                     "+Thread.currentThread().getName() + ": Entre a la zona de entrega para snorkel ilimitado y le aviso al encargado");
         z.hacerFilaPatasRana();
         z.hacerFilaSalvavidas();
         z.hacerFilaSnorkel();
-        System.out.println(Thread.currentThread().getName()+": Esta disfrutando de la actividad snorkel ilimitado");
-        this.simular(4000);
+        System.out.println("                     "+Thread.currentThread().getName()+": Esta disfrutando de la actividad snorkel ilimitado");
+        this.simular(4000); //para simular que esta nadando
         z.salirDeLaPileta();
-        System.out.println(Thread.currentThread().getName()+ ": Se fue de la actividad de snorkel ilimitado");
+        System.out.println("                     "+Thread.currentThread().getName()+ ": Se fue de la actividad de snorkel ilimitado");
         }
     
     
     private void carrerita(){
         if(Random.nextInt(2)==0){ 
-            System.out.println(Thread.currentThread().getName()+": Ira hasta el inicio de la carrera de gomones en Tren");
+            System.out.println("              "+Thread.currentThread().getName()+": Ira hasta el inicio de la carrera de gomones en Tren");
             //debe ir en tren
              t.subirse();
              t.bajarse();
         }else{
-            System.out.println(Thread.currentThread().getName()+ ": Ira hasta la actividad de gomones en bici");
-            this.simular(1000);
+            System.out.println("              "+Thread.currentThread().getName()+ ": Ira hasta la actividad de gomones en bici");
+            this.simular(2000); //para simular el tiempo que le tomaria ir en bici
         }
-        System.out.println(Thread.currentThread().getName()+ ": Llego al inicio de la actividad de gomones");
+        System.out.println("              "+Thread.currentThread().getName()+ ": Llego al inicio de la actividad de gomones");
         
         int nroBolso=Random.nextInt(2); //Para decidir si deja o no el bolso
         if(nroBolso==0){
-             System.out.println(Thread.currentThread().getName()+": Dejo su bolso con pertenencias, debe pasar a buscarlo al final de la act");
+            this.simular(1500); //para simular el tiempo que le costaria dejar sus pertenencias
+             System.out.println("              "+Thread.currentThread().getName()+": Dejo su bolso con pertenencias, debe pasar a buscarlo al final de la act");
         }
         
         //Decidiremos si se sube a un gomon simple (1) o uno doble (2)
@@ -196,10 +207,11 @@ public class Cliente implements Runnable {
             
          rio.bajarse();
 
-         if(nroBolso==0) //Si habia dejado su bolso con pertenencias debe buscarlo
-            System.out.println(Thread.currentThread().getName()+": Paso a buscar su bolso con sus pertenencias");
-        
-        System.out.println(Thread.currentThread().getName()+ ": Se fue de la actividad carrera de gomones");
+         if(nroBolso==0){ //Si habia dejado su bolso con pertenencias debe buscarlo
+             this.simular(1500); //para simular el tiempo que le tomaria volver a obtener sus pertenencias
+            System.out.println("              "+Thread.currentThread().getName()+": Paso a buscar su bolso con sus pertenencias");
+         }
+        System.out.println("              "+Thread.currentThread().getName()+ ": Se fue de la actividad carrera de gomones");
     }
 }
 
@@ -208,4 +220,3 @@ public class Cliente implements Runnable {
 
     
     
-

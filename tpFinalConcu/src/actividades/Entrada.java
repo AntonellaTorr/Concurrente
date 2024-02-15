@@ -6,6 +6,9 @@ import java.util.concurrent.Semaphore;
 el visitante puede optar por ir al shop o disfrutar de las actividades del parque. */
 
 public class Entrada {
+    public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
+     public static final String ANSI_RESET = "\u001B[0m";
+    
    private Molinete[] molinetes; //cantidad que es ingresada por parametros
    private int horaActual;
    private Semaphore mutexHora;
@@ -80,7 +83,7 @@ public class Entrada {
        else
            horaActual++;
 
-    System.out.println(" -----------La hora es:" + horaActual);
+    System.out.println(ANSI_GREEN_BACKGROUND+" -----------La hora es:" + horaActual+"-----------"+ANSI_RESET);
     mutexHora.release();
    }
     

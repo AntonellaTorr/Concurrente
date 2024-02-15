@@ -26,6 +26,11 @@ import java.util.logging.Logger;
 
 //no van a poder hacer acquire de nuevos gomones si no terminaron 
 public class Rio {
+    
+    public static final String  ANSI_CYAN_BACKGROUND = "\u001B[46m";
+     public static final String ANSI_RESET = "\u001B[0m";
+    
+    
     private int cantIndividuales, cantDobles;//La cantidad de gomones que hay para cada tipo
     private int cantGomonesQueSePuedenTirar;//Cantidad de gomones que se pueden tirar juntos
     private Semaphore gomonesIndividuales, gomonesDobles;//Representa los gomones que hay
@@ -142,7 +147,7 @@ public class Rio {
     public void finalizarCarrera() {
         try {
             if (ganador.tryAcquire()) {
-                System.out.println(Thread.currentThread().getName() + " GANO !!!!!!!!!!!!!!!!!!!!1");
+                System.out.println(Thread.currentThread().getName() + ANSI_CYAN_BACKGROUND + " GANO !!!!!!!!!!!!!!!!!!!!1"+ ANSI_RESET);
 
             }
             meta.await();

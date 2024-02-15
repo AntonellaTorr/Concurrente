@@ -32,9 +32,9 @@ public class EmpleadoTrenGomones implements Runnable{
             while(true){
             t.posicionarseEnPuerta();
             t.iniciarViaje();
-            this.simulaViaje();
+            this.simulaViaje(); //el tiempo que le toma ir
             t.avisarLlegadaDestino();
-            this.simulaViaje();
+            this.simulaViaje(); //el tiempo que le toma volver
 
             }
         }

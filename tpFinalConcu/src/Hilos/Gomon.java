@@ -31,14 +31,14 @@ public class Gomon implements Runnable {
     public void run (){
         while(true){
         r.correrCarrera(tipo);
-        this.simular();
+        this.simular(); //el tiempo que dura la carrera
         r.finalizarCarrera();
     }
     }
     
     public void simular (){
         try{
-            Thread.sleep(100);
+            Thread.sleep(7000);
 
         }catch (Exception e){
         

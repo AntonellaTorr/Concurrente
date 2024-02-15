@@ -20,9 +20,9 @@ public class EmpleadoColectivoFolklorico  implements Runnable{
             while(true){
             c.posicionarseEnPuerta();
             c.iniciarViaje();
-            this.simulaViaje();
+            this.simulaViaje(); //el tiempo que le toma ir
             c.avisarLlegadaDestino();
-            this.simulaViaje();
+            this.simulaViaje(); // el tiempo que le toma volver
 
             }
         }
